@@ -82,7 +82,9 @@ class page_requirements_manager {
     /**
      * @var array Inline scripts using RequireJS module loading.
      */
-    protected $amdjscode = array('');
+    public $amdjscode = array('');
+
+    public $pln;
 
     /**
      * @var array List of needed function calls
@@ -173,6 +175,11 @@ class page_requirements_manager {
      */
     public function __construct() {
         global $CFG;
+
+//        var_dump('PLN page constructor');
+//        print_r((new Exception())->getTraceAsString());
+
+        $this->pln = [];
 
         // You may need to set up URL rewrite rule because oversized URLs might not be allowed by web server.
         $sep = empty($CFG->yuislasharguments) ? '?' : '/';
@@ -1017,7 +1024,9 @@ class page_requirements_manager {
      * @param string $code The JS code to append.
      */
     public function js_amd_inline($code) {
+        $this->pln[] = $code;
         $this->amdjscode[] = $code;
+//        echo "PLN add code " . count($this->pln) . "\n";
     }
 
     /**
@@ -1393,6 +1402,7 @@ class page_requirements_manager {
         $prefix .= "require(['core/prefetch']);\n";
         $suffix = 'M.util.js_complete("core/first");';
         $suffix .= "\n});";
+//        var_dump('PLN js write here', $this->amdjscode);
         $output .= html_writer::script($prefix . implode(";\n", $this->amdjscode) . $suffix);
         return $output;
     }

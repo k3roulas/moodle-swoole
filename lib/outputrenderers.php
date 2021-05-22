@@ -71,6 +71,8 @@ class renderer_base {
      */
     private $mustache;
 
+    private static $templatecache = [];
+
     /**
      * Return an instance of the mustache class.
      *
@@ -165,7 +167,7 @@ class renderer_base {
      * @return string|boolean
      */
     public function render_from_template($templatename, $context) {
-        static $templatecache = array();
+//        static $templatecache = array();
         $mustache = $this->get_mustache();
 
         try {
@@ -181,12 +183,12 @@ class renderer_base {
         // e.g. aria attributes that only work with id attributes and must be
         // unique in a page.
         $mustache->addHelper('uniqid', new \core\output\mustache_uniqid_helper());
-        if (isset($templatecache[$templatename])) {
-            $template = $templatecache[$templatename];
+        if (isset(renderer_base::$templatecache[$templatename])) {
+            $template = renderer_base::$templatecache[$templatename];
         } else {
             try {
                 $template = $mustache->loadTemplate($templatename);
-                $templatecache[$templatename] = $template;
+                renderer_base::$templatecache[$templatename] = $template;
             } catch (Mustache_Exception_UnknownTemplateException $e) {
                 throw new moodle_exception('Unknown template: ' . $templatename);
             }
@@ -203,6 +205,9 @@ class renderer_base {
         return $renderedtemplate;
     }
 
+    static public function reset_template_cache() {
+        renderer_base::$templatecache = [];
+    }
 
     /**
      * Returns rendered widget.

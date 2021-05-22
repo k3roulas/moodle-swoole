@@ -307,10 +307,11 @@ if (defined('WEB_CRON_EMULATED_CLI')) {
         exit(1);
     }
 } else {
-    if (!CLI_SCRIPT) {
-        echo('Command line scripts must define CLI_SCRIPT before requiring config.php'."\n");
-        exit(1);
-    }
+    // PLN
+//    if (!CLI_SCRIPT) {
+//        echo('Command line scripts must define CLI_SCRIPT before requiring config.php'."\n");
+//        exit(1);
+//    }
 }
 
 // All web service requests have WS_SERVER == true.
@@ -437,7 +438,7 @@ if (!empty($CFG->earlyprofilingenabled)) {
 global $DB;
 
 /**
- * Moodle's wrapper round PHP's $_SESSION.
+ * Moodle's wrapper round PHP's $_SESSIONPLN.
  *
  * @global object $SESSION
  * @name $SESSION
@@ -795,7 +796,7 @@ if (CLI_SCRIPT) {
 if (empty($CFG->sessiontimeout)) {
     $CFG->sessiontimeout = 8 * 60 * 60;
 }
-\core\session\manager::start();
+//\core\session\manager::start();
 
 // Set default content type and encoding, developers are still required to use
 // echo $OUTPUT->header() everywhere, anything that gets set later should override these headers.
@@ -907,6 +908,7 @@ if (!empty($CFG->moodlepageclass)) {
     $classname = 'moodle_page';
 }
 $PAGE = new $classname();
+echo "PLN create PAGE";
 unset($classname);
 
 

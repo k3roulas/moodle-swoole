@@ -216,6 +216,8 @@ class xml_writer {
             $this->lastwastext = true;
             $this->end_tag($tag);
         }
+        // LTS-2029 reinit to default (same as constructor)
+        $this->nullcontent = false;
     }
 
 

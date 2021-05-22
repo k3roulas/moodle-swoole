@@ -104,7 +104,7 @@ if ($options['run']) {
 }
 
 // Only load CFG from config.php, stop ASAP in lib/setup.php.
-define('ABORT_AFTER_CONFIG', true);
+//define('ABORT_AFTER_CONFIG', true);
 require_once(__DIR__ . '/../../../../config.php');
 
 // Remove error handling overrides done in config.php.

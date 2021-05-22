@@ -75,6 +75,10 @@ EOD;
                 $compressed[] = "\n\n// Cannot read JS file ".basename(dirname(dirname($file))).'/'.basename(dirname($file)).'/'.basename($file)."\n\n";
                 continue;
             }
+            if (strpos($file, 'vendor') !== false) {
+                $compressed[] = $content;
+                continue;
+            }
             $compressed[] = self::js($content);
         }
 

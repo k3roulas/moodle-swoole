@@ -27,7 +27,7 @@ if (isset($_SERVER['REMOTE_ADDR'])) {
 }
 
 define('CLI_SCRIPT', true);
-define('ABORT_AFTER_CONFIG', true);
+//define('ABORT_AFTER_CONFIG', true);
 define('CACHE_DISABLE_ALL', true);
 define('NO_OUTPUT_BUFFERING', true);
 

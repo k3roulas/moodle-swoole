@@ -1785,9 +1785,9 @@ class cache_session extends cache {
      * Check that this cache instance is tracking the current user.
      */
     protected function check_tracked_user() {
-        if (isset($_SESSION['USER']->id) && $_SESSION['USER']->id !== null) {
+        if (isset($_SESSIONPLN['USER']->id) && $_SESSIONPLN['USER']->id !== null) {
             // Get the id of the current user.
-            $new = $_SESSION['USER']->id;
+            $new = $_SESSIONPLN['USER']->id;
         } else {
             // No user set up yet.
             $new = 0;

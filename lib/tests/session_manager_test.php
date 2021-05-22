@@ -49,55 +49,55 @@ class core_session_manager_testcase extends advanced_testcase {
 
         $SESSION->test = true;
         $this->assertTrue($GLOBALS['SESSION']->test);
-        $this->assertTrue($_SESSION['SESSION']->test);
+        $this->assertTrue($_SESSIONPLN['SESSION']->test);
 
         \core\session\manager::set_user($user);
         $this->assertSame($user, $USER);
         $this->assertSame($user, $GLOBALS['USER']);
-        $this->assertSame($user, $_SESSION['USER']);
+        $this->assertSame($user, $_SESSIONPLN['USER']);
 
         \core\session\manager::init_empty_session();
 
         $this->assertInstanceOf('stdClass', $SESSION);
         $this->assertEmpty((array)$SESSION);
-        $this->assertSame($GLOBALS['SESSION'], $_SESSION['SESSION']);
+        $this->assertSame($GLOBALS['SESSION'], $_SESSIONPLN['SESSION']);
         $this->assertSame($GLOBALS['SESSION'], $SESSION);
 
         $this->assertInstanceOf('stdClass', $USER);
         $this->assertEquals(array('id' => 0, 'mnethostid' => 1), (array)$USER, '', 0, 10, true);
-        $this->assertSame($GLOBALS['USER'], $_SESSION['USER']);
+        $this->assertSame($GLOBALS['USER'], $_SESSIONPLN['USER']);
         $this->assertSame($GLOBALS['USER'], $USER);
 
         // Now test how references work.
 
         $GLOBALS['SESSION'] = new \stdClass();
         $GLOBALS['SESSION']->test = true;
-        $this->assertSame($GLOBALS['SESSION'], $_SESSION['SESSION']);
+        $this->assertSame($GLOBALS['SESSION'], $_SESSIONPLN['SESSION']);
         $this->assertSame($GLOBALS['SESSION'], $SESSION);
 
         $SESSION = new \stdClass();
         $SESSION->test2 = true;
-        $this->assertSame($GLOBALS['SESSION'], $_SESSION['SESSION']);
+        $this->assertSame($GLOBALS['SESSION'], $_SESSIONPLN['SESSION']);
         $this->assertSame($GLOBALS['SESSION'], $SESSION);
 
-        $_SESSION['SESSION'] = new stdClass();
-        $_SESSION['SESSION']->test3 = true;
-        $this->assertSame($GLOBALS['SESSION'], $_SESSION['SESSION']);
+        $_SESSIONPLN['SESSION'] = new stdClass();
+        $_SESSIONPLN['SESSION']->test3 = true;
+        $this->assertSame($GLOBALS['SESSION'], $_SESSIONPLN['SESSION']);
         $this->assertSame($GLOBALS['SESSION'], $SESSION);
 
         $GLOBALS['USER'] = new \stdClass();
         $GLOBALS['USER']->test = true;
-        $this->assertSame($GLOBALS['USER'], $_SESSION['USER']);
+        $this->assertSame($GLOBALS['USER'], $_SESSIONPLN['USER']);
         $this->assertSame($GLOBALS['USER'], $USER);
 
         $USER = new \stdClass();
         $USER->test2 = true;
-        $this->assertSame($GLOBALS['USER'], $_SESSION['USER']);
+        $this->assertSame($GLOBALS['USER'], $_SESSIONPLN['USER']);
         $this->assertSame($GLOBALS['USER'], $USER);
 
-        $_SESSION['USER'] = new stdClass();
-        $_SESSION['USER']->test3 = true;
-        $this->assertSame($GLOBALS['USER'], $_SESSION['USER']);
+        $_SESSIONPLN['USER'] = new stdClass();
+        $_SESSIONPLN['USER']->test3 = true;
+        $this->assertSame($GLOBALS['USER'], $_SESSIONPLN['USER']);
         $this->assertSame($GLOBALS['USER'], $USER);
     }
 
@@ -118,7 +118,7 @@ class core_session_manager_testcase extends advanced_testcase {
         $this->assertObjectNotHasAttribute('password', $user);
         $this->assertObjectHasAttribute('sesskey', $user);
         $this->assertSame($user, $GLOBALS['USER']);
-        $this->assertSame($GLOBALS['USER'], $_SESSION['USER']);
+        $this->assertSame($GLOBALS['USER'], $_SESSIONPLN['USER']);
         $this->assertSame($GLOBALS['USER'], $USER);
     }
 
@@ -136,7 +136,7 @@ class core_session_manager_testcase extends advanced_testcase {
         $this->assertObjectNotHasAttribute('description', $user);
         $this->assertObjectNotHasAttribute('password', $user);
         $this->assertSame($user, $GLOBALS['USER']);
-        $this->assertSame($GLOBALS['USER'], $_SESSION['USER']);
+        $this->assertSame($GLOBALS['USER'], $_SESSIONPLN['USER']);
         $this->assertSame($GLOBALS['USER'], $USER);
     }
 
@@ -150,12 +150,12 @@ class core_session_manager_testcase extends advanced_testcase {
 
         $this->assertInstanceOf('stdClass', $SESSION);
         $this->assertEmpty((array)$SESSION);
-        $this->assertSame($GLOBALS['SESSION'], $_SESSION['SESSION']);
+        $this->assertSame($GLOBALS['SESSION'], $_SESSIONPLN['SESSION']);
         $this->assertSame($GLOBALS['SESSION'], $SESSION);
 
         $this->assertInstanceOf('stdClass', $USER);
         $this->assertEquals(array('id' => 0, 'mnethostid' => 1), (array)$USER, '', 0, 10, true);
-        $this->assertSame($GLOBALS['USER'], $_SESSION['USER']);
+        $this->assertSame($GLOBALS['USER'], $_SESSIONPLN['USER']);
         $this->assertSame($GLOBALS['USER'], $USER);
     }
 
@@ -169,7 +169,7 @@ class core_session_manager_testcase extends advanced_testcase {
         \core\session\manager::write_close();
         $this->assertSame($userid, $USER->id);
 
-        $this->assertSame($GLOBALS['USER'], $_SESSION['USER']);
+        $this->assertSame($GLOBALS['USER'], $_SESSIONPLN['USER']);
         $this->assertSame($GLOBALS['USER'], $USER);
     }
 
@@ -564,7 +564,7 @@ class core_session_manager_testcase extends advanced_testcase {
         $adminuser = $USER;
         $adminsession = $SESSION;
         $user = $this->getDataGenerator()->create_user();
-        $_SESSION['extra'] = true;
+        $_SESSIONPLN['extra'] = true;
 
         // Try admin loginas this user in system context.
         $this->assertObjectNotHasAttribute('realuser', $USER);
@@ -573,17 +573,17 @@ class core_session_manager_testcase extends advanced_testcase {
         $this->assertSame($user->id, $USER->id);
         $this->assertEquals(context_system::instance(), $USER->loginascontext);
         $this->assertSame($adminuser->id, $USER->realuser);
-        $this->assertSame($GLOBALS['USER'], $_SESSION['USER']);
+        $this->assertSame($GLOBALS['USER'], $_SESSIONPLN['USER']);
         $this->assertSame($GLOBALS['USER'], $USER);
-        $this->assertNotSame($adminuser, $_SESSION['REALUSER']);
-        $this->assertEquals($adminuser, $_SESSION['REALUSER']);
+        $this->assertNotSame($adminuser, $_SESSIONPLN['REALUSER']);
+        $this->assertEquals($adminuser, $_SESSIONPLN['REALUSER']);
 
-        $this->assertSame($GLOBALS['SESSION'], $_SESSION['SESSION']);
+        $this->assertSame($GLOBALS['SESSION'], $_SESSIONPLN['SESSION']);
         $this->assertSame($GLOBALS['SESSION'], $SESSION);
-        $this->assertNotSame($adminsession, $_SESSION['REALSESSION']);
-        $this->assertEquals($adminsession, $_SESSION['REALSESSION']);
+        $this->assertNotSame($adminsession, $_SESSIONPLN['REALSESSION']);
+        $this->assertEquals($adminsession, $_SESSIONPLN['REALSESSION']);
 
-        $this->assertArrayNotHasKey('extra', $_SESSION);
+        $this->assertArrayNotHasKey('extra', $_SESSIONPLN);
 
         // Set user as current user and login as admin user in course context.
         \core\session\manager::init_empty_session();
@@ -651,7 +651,7 @@ class core_session_manager_testcase extends advanced_testcase {
         unset($user1->sesskey);
 
         $this->assertEquals($real, $user1);
-        $this->assertSame($_SESSION['REALUSER'], $real);
+        $this->assertSame($_SESSIONPLN['REALUSER'], $real);
     }
 
     /**

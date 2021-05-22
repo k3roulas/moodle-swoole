@@ -32,29 +32,38 @@ defined('MOODLE_INTERNAL') || die();
  * @param string $filename
  */
 function js_send_cached($jspath, $etag, $filename = 'javascript.php') {
-    require(__DIR__ . '/xsendfilelib.php');
+    require_once(__DIR__ . '/xsendfilelib.php');
 
     // 90 days only - based on Moodle point release cadence being every 3 months.
     $lifetime = 60 * 60 * 24 * 90;
 
-    header('Etag: "'.$etag.'"');
-    header('Content-Disposition: inline; filename="'.$filename.'"');
-    header('Last-Modified: '. gmdate('D, d M Y H:i:s', filemtime($jspath)) .' GMT');
-    header('Expires: '. gmdate('D, d M Y H:i:s', time() + $lifetime) .' GMT');
-    header('Pragma: ');
-    header('Cache-Control: public, max-age='.$lifetime.', immutable');
-    header('Accept-Ranges: none');
-    header('Content-Type: application/javascript; charset=utf-8');
+    SwooleHeader::addHeader('Etag: "'.$etag.'"');
+    SwooleHeader::addHeader('Content-Disposition: inline; filename="'.$filename.'"');
+    SwooleHeader::addHeader('Last-Modified: '. gmdate('D, d M Y H:i:s', filemtime($jspath)) .' GMT');
+    SwooleHeader::addHeader('Expires: '. gmdate('D, d M Y H:i:s', time() + $lifetime) .' GMT');
+    SwooleHeader::addHeader('Pragma: ');
+    SwooleHeader::addHeader('Cache-Control: public, max-age='.$lifetime.', immutable');
+    SwooleHeader::addHeader('Accept-Ranges: none');
+    SwooleHeader::addHeader('Content-Type: application/javascript; charset=utf-8');
+//    header('Etag: "'.$etag.'"');
+//    header('Content-Disposition: inline; filename="'.$filename.'"');
+//    header('Last-Modified: '. gmdate('D, d M Y H:i:s', filemtime($jspath)) .' GMT');
+//    header('Expires: '. gmdate('D, d M Y H:i:s', time() + $lifetime) .' GMT');
+//    header('Pragma: ');
+//    header('Cache-Control: public, max-age='.$lifetime.', immutable');
+//    header('Accept-Ranges: none');
+//    header('Content-Type: application/javascript; charset=utf-8');
 
-    if (xsendfile($jspath)) {
+    if (xsendfile($jspath)) { // TODO PLN
         die;
     }
 
-    if (!min_enable_zlib_compression()) {
-        header('Content-Length: '.filesize($jspath));
-    }
+//    if (!min_enable_zlib_compression()) {
+//        header('Content-Length: '.filesize($jspath));
+//    }
 
     readfile($jspath);
+    throw new ExceptionExit('from js_send_cached');
     die;
 }
 

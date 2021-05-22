@@ -3,22 +3,22 @@
  * XMPPHP: The PHP XMPP Library
  * Copyright (C) 2008  Nathanael C. Fritz
  * This file is part of SleekXMPP.
- * 
+ *
  * XMPPHP is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * XMPPHP is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with XMPPHP; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category   xmpphp 
+ * @category   xmpphp
  * @package	XMPPHP
  * @author	 Nathanael C. Fritz <JID: fritzy@netflint.net>
  * @author	 Stephan Wentz <JID: stephan@jabber.wentz.it>
@@ -31,8 +31,8 @@ require_once dirname(__FILE__) . "/XMPP.php";
 
 /**
  * XMPPHP Main Class
- * 
- * @category   xmpphp 
+ *
+ * @category   xmpphp
  * @package	XMPPHP
  * @author	 Nathanael C. Fritz <JID: fritzy@netflint.net>
  * @author	 Stephan Wentz <JID: stephan@jabber.wentz.it>
@@ -171,18 +171,18 @@ class XMPPHP_BOSH extends XMPPHP_XMPP {
 		}
 
 		public function loadSession() {
-			if(isset($_SESSION['XMPPHP_BOSH_RID'])) $this->rid = $_SESSION['XMPPHP_BOSH_RID'];
-			if(isset($_SESSION['XMPPHP_BOSH_SID'])) $this->sid = $_SESSION['XMPPHP_BOSH_SID'];
-			if(isset($_SESSION['XMPPHP_BOSH_authed'])) $this->authed = $_SESSION['XMPPHP_BOSH_authed'];
-			if(isset($_SESSION['XMPPHP_BOSH_jid'])) $this->jid = $_SESSION['XMPPHP_BOSH_jid'];
-			if(isset($_SESSION['XMPPHP_BOSH_fulljid'])) $this->fulljid = $_SESSION['XMPPHP_BOSH_fulljid'];
+			if(isset($_SESSIONPLN['XMPPHP_BOSH_RID'])) $this->rid = $_SESSIONPLN['XMPPHP_BOSH_RID'];
+			if(isset($_SESSIONPLN['XMPPHP_BOSH_SID'])) $this->sid = $_SESSIONPLN['XMPPHP_BOSH_SID'];
+			if(isset($_SESSIONPLN['XMPPHP_BOSH_authed'])) $this->authed = $_SESSIONPLN['XMPPHP_BOSH_authed'];
+			if(isset($_SESSIONPLN['XMPPHP_BOSH_jid'])) $this->jid = $_SESSIONPLN['XMPPHP_BOSH_jid'];
+			if(isset($_SESSIONPLN['XMPPHP_BOSH_fulljid'])) $this->fulljid = $_SESSIONPLN['XMPPHP_BOSH_fulljid'];
 		}
 
 		public function saveSession() {
-			$_SESSION['XMPPHP_BOSH_RID'] = (string) $this->rid;
-			$_SESSION['XMPPHP_BOSH_SID'] = (string) $this->sid;
-			$_SESSION['XMPPHP_BOSH_authed'] = (boolean) $this->authed;
-			$_SESSION['XMPPHP_BOSH_jid'] = (string) $this->jid;
-			$_SESSION['XMPPHP_BOSH_fulljid'] = (string) $this->fulljid;
+			$_SESSIONPLN['XMPPHP_BOSH_RID'] = (string) $this->rid;
+			$_SESSIONPLN['XMPPHP_BOSH_SID'] = (string) $this->sid;
+			$_SESSIONPLN['XMPPHP_BOSH_authed'] = (boolean) $this->authed;
+			$_SESSIONPLN['XMPPHP_BOSH_jid'] = (string) $this->jid;
+			$_SESSIONPLN['XMPPHP_BOSH_fulljid'] = (string) $this->fulljid;
 		}
 }

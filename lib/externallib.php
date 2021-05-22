@@ -205,7 +205,7 @@ class external_api {
         $currentcourse = $COURSE;
         $response = array();
 
-        try {
+//        try {
             // Taken straight from from setup.php.
             if (!empty($CFG->moodlepageclass)) {
                 if (!empty($CFG->moodlepageclassfile)) {
@@ -269,18 +269,18 @@ class external_api {
 
             $response['error'] = false;
             $response['data'] = $result;
-        } catch (Throwable $e) {
-            $exception = get_exception_info($e);
-            unset($exception->a);
-            $exception->backtrace = format_backtrace($exception->backtrace, true);
-            if (!debugging('', DEBUG_DEVELOPER)) {
-                unset($exception->debuginfo);
-                unset($exception->backtrace);
-            }
-            $response['error'] = true;
-            $response['exception'] = $exception;
-            // Do not process the remaining requests.
-        }
+//        } catch (Throwable $e) {
+//            $exception = get_exception_info($e);
+//            unset($exception->a);
+//            $exception->backtrace = format_backtrace($exception->backtrace, true);
+//            if (!debugging('', DEBUG_DEVELOPER)) {
+//                unset($exception->debuginfo);
+//                unset($exception->backtrace);
+//            }
+//            $response['error'] = true;
+//            $response['exception'] = $exception;
+//            // Do not process the remaining requests.
+//        }
 
         $PAGE = $currentpage;
         $COURSE = $currentcourse;

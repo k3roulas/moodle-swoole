@@ -138,7 +138,7 @@ class client extends \core\oauth2\client {
         $random = bin2hex(openssl_random_pseudo_bytes(43));
         $verifier = $this->base64url_encode(pack('H*', $random));
         $challenge = $this->base64url_encode(pack('H*', hash('sha256', $verifier)));
-        $_SESSION['SESSION']->code_verifier = $verifier;
+        $_SESSIONPLN['SESSION']->code_verifier = $verifier;
         return $challenge;
     }
 
@@ -148,8 +148,8 @@ class client extends \core\oauth2\client {
      * @return bool
      */
     public function code_verifier() {
-        if (isset($_SESSION['SESSION']) && !empty($_SESSION['SESSION']->code_verifier)) {
-            return $_SESSION['SESSION']->code_verifier;
+        if (isset($_SESSIONPLN['SESSION']) && !empty($_SESSIONPLN['SESSION']->code_verifier)) {
+            return $_SESSIONPLN['SESSION']->code_verifier;
         }
         return false;
     }

@@ -92,19 +92,31 @@ function css_send_cached_css($csspath, $etag) {
     // 90 days only - based on Moodle point release cadence being every 3 months.
     $lifetime = 60 * 60 * 24 * 90;
 
-    header('Etag: "'.$etag.'"');
-    header('Content-Disposition: inline; filename="styles.php"');
-    header('Last-Modified: '. gmdate('D, d M Y H:i:s', filemtime($csspath)) .' GMT');
-    header('Expires: '. gmdate('D, d M Y H:i:s', time() + $lifetime) .' GMT');
-    header('Pragma: ');
-    header('Cache-Control: public, max-age='.$lifetime.', immutable');
-    header('Accept-Ranges: none');
-    header('Content-Type: text/css; charset=utf-8');
-    if (!min_enable_zlib_compression()) {
-        header('Content-Length: '.filesize($csspath));
-    }
+    // PLN
+    SwooleHeader::addHeader('Etag: "'.$etag.'"');
+    SwooleHeader::addHeader('Content-Disposition: inline; filename="styles.php"');
+    SwooleHeader::addHeader('Last-Modified: '. gmdate('D, d M Y H:i:s', filemtime($csspath)) .' GMT');
+    SwooleHeader::addHeader('Expires: '. gmdate('D, d M Y H:i:s', time() + $lifetime) .' GMT');
+    SwooleHeader::addHeader('Pragma: ');
+    SwooleHeader::addHeader('Cache-Control: public, max-age='.$lifetime.', immutable');
+    SwooleHeader::addHeader('Accept-Ranges: none');
+    SwooleHeader::addHeader('Content-Type: text/css; charset=utf-8');
+//    header('Etag: "'.$etag.'"');
+//    header('Content-Disposition: inline; filename="styles.php"');
+//    header('Last-Modified: '. gmdate('D, d M Y H:i:s', filemtime($csspath)) .' GMT');
+//    header('Expires: '. gmdate('D, d M Y H:i:s', time() + $lifetime) .' GMT');
+//    header('Pragma: ');
+//    header('Cache-Control: public, max-age='.$lifetime.', immutable');
+//    header('Accept-Ranges: none');
+//    header('Content-Type: text/css; charset=utf-8');
+//    if (!min_enable_zlib_compression()) {
+//        header('Content-Length: '.filesize($csspath)); // Not needed, swoole takes car of adding this value
+//        SwooleHeader::addHeader('Content-Length: '.filesize($csspath));
+//    }
 
     readfile($csspath);
+    // PLN
+    throw new ExceptionExit('from csslib css_send_cached_css');
     die;
 }
 

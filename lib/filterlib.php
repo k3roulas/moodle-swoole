@@ -68,7 +68,7 @@ class filter_manager {
     protected $stringfilternames = array();
 
     /** @var filter_manager Holds the singleton instance. */
-    protected static $singletoninstance;
+    public static $singletoninstance;
 
     /**
      * Constructor. Protected. Use {@link instance()} instead.

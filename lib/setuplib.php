@@ -442,7 +442,7 @@ function abort_all_db_transactions() {
 
     if ($DB && $DB->is_transaction_started()) {
         error_log('Database transaction aborted automatically in ' . $CFG->dirroot . $SCRIPT);
-        // note: transaction blocks should never change current $_SESSION
+        // note: transaction blocks should never change current $_SESSIONPLN
         $DB->force_transaction_rollback();
     }
 }
@@ -1037,7 +1037,8 @@ function setup_get_remote_url() {
         $rurl['fullpath'] = $_SERVER['REQUEST_URI'];
 
     } else {
-        throw new moodle_exception('unsupportedwebserver', 'error', '', $_SERVER['SERVER_SOFTWARE']);
+        // PLN
+//        throw new moodle_exception('unsupportedwebserver', 'error', '', $_SERVER['SERVER_SOFTWARE']);
     }
 
     // sanitize the url a bit more, the encoding style may be different in vars above
@@ -1407,18 +1408,19 @@ function is_major_upgrade_required() {
  */
 function redirect_if_major_upgrade_required() {
     global $CFG;
-    if (is_major_upgrade_required()) {
-        try {
-            @\core\session\manager::terminate_current();
-        } catch (Exception $e) {
-            // Ignore any errors, redirect to upgrade anyway.
-        }
-        $url = $CFG->wwwroot . '/' . $CFG->admin . '/index.php';
-        @header($_SERVER['SERVER_PROTOCOL'] . ' 303 See Other');
-        @header('Location: ' . $url);
-        echo bootstrap_renderer::plain_redirect_message(htmlspecialchars($url));
-        exit;
-    }
+    // PLN swoole
+//    if (is_major_upgrade_required()) {
+//        try {
+//            @\core\session\manager::terminate_current();
+//        } catch (Exception $e) {
+//            // Ignore any errors, redirect to upgrade anyway.
+//        }
+//        $url = $CFG->wwwroot . '/' . $CFG->admin . '/index.php';
+//        @header($_SERVER['SERVER_PROTOCOL'] . ' 303 See Other');
+//        @header('Location: ' . $url);
+//        echo bootstrap_renderer::plain_redirect_message(htmlspecialchars($url));
+//        exit;
+//    }
 }
 
 /**

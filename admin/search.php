@@ -1,7 +1,6 @@
 <?php
 
 // searches for admin settings
-
 require_once('../config.php');
 require_once($CFG->libdir.'/adminlib.php');
 

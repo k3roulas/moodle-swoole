@@ -128,7 +128,8 @@ class manager {
 
             if (!self::$handler->start()) {
                 // Could not successfully start/recover session.
-                throw new \core\session\exception(get_string('servererror'));
+                // PLN not session for now
+//                throw new \core\session\exception(get_string('servererror'));
             }
 
             // Grab the time when session lock starts.
@@ -139,18 +140,19 @@ class manager {
             self::check_security();
 
             if (!$requireslock) {
-                self::$priorsession = (array) $_SESSION['SESSION'];
+                self::$priorsession = (array) $_SESSIONPLN['SESSION'];
             }
 
             // Link global $USER and $SESSION,
             // this is tricky because PHP does not allow references to references
             // and global keyword uses internally once reference to the $GLOBALS array.
             // The solution is to use the $GLOBALS['USER'] and $GLOBALS['$SESSION']
-            // as the main storage of data and put references to $_SESSION.
-            $GLOBALS['USER'] = $_SESSION['USER'];
-            $_SESSION['USER'] =& $GLOBALS['USER'];
-            $GLOBALS['SESSION'] = $_SESSION['SESSION'];
-            $_SESSION['SESSION'] =& $GLOBALS['SESSION'];
+            // as the main storage of data and put references to $_SESSIONPLN.
+//            $GLOBALS['USER'] = $_SESSIONPLN['USER'];
+//            $_SESSIONPLN['USER'] =& $GLOBALS['USER'];
+//            $GLOBALS['SESSION'] = $_SESSIONPLN['SESSION'];
+//            $_SESSIONPLN['SESSION'] =& $GLOBALS['SESSION'];
+//            echo "PLN " . __LINE__  . "\n";
 
         } catch (\Exception $ex) {
             self::init_empty_session();
@@ -263,9 +265,9 @@ class manager {
         }
 
         // Link global $USER and $SESSION.
-        $_SESSION = array();
-        $_SESSION['USER'] =& $GLOBALS['USER'];
-        $_SESSION['SESSION'] =& $GLOBALS['SESSION'];
+        $_SESSIONPLN = array();
+        $_SESSIONPLN['USER'] =& $GLOBALS['USER'];
+        $_SESSIONPLN['SESSION'] =& $GLOBALS['SESSION'];
     }
 
     /**
@@ -369,7 +371,7 @@ class manager {
     }
 
     /**
-     * Initialise $_SESSION, handles google access
+     * Initialise $_SESSIONPLN, handles google access
      * and sets up not-logged-in user properly.
      *
      * WARNING: $USER and $SESSION are set up later, do not use them yet!
@@ -389,22 +391,22 @@ class manager {
 
         if (!$record = $DB->get_record('sessions', array('sid'=>$sid), 'id, sid, state, userid, lastip, timecreated, timemodified')) {
             if (!$newsid) {
-                if (!empty($_SESSION['USER']->id)) {
+                if (!empty($_SESSIONPLN['USER']->id)) {
                     // This should not happen, just log it, we MUST not produce any output here!
-                    error_log("Cannot find session record $sid for user ".$_SESSION['USER']->id.", creating new session.");
+                    error_log("Cannot find session record $sid for user ".$_SESSIONPLN['USER']->id.", creating new session.");
                 }
                 // Prevent session fixation attacks.
                 session_regenerate_id(true);
             }
-            $_SESSION = array();
+            $_SESSIONPLN = array();
         }
         unset($sid);
 
-        if (isset($_SESSION['USER']->id)) {
-            if (!empty($_SESSION['USER']->realuser)) {
-                $userid = $_SESSION['USER']->realuser;
+        if (isset($_SESSIONPLN['USER']->id)) {
+            if (!empty($_SESSIONPLN['USER']->realuser)) {
+                $userid = $_SESSIONPLN['USER']->realuser;
             } else {
-                $userid = $_SESSION['USER']->id;
+                $userid = $_SESSIONPLN['USER']->id;
             }
 
             // Verify timeout first.
@@ -419,7 +421,7 @@ class manager {
                 $authsequence = get_enabled_auth_plugins(); // Auths, in sequence.
                 foreach ($authsequence as $authname) {
                     $authplugin = get_auth_plugin($authname);
-                    if ($authplugin->ignore_timeout_hook($_SESSION['USER'], $record->sid, $record->timecreated, $record->timemodified)) {
+                    if ($authplugin->ignore_timeout_hook($_SESSIONPLN['USER'], $record->sid, $record->timecreated, $record->timemodified)) {
                         $timeout = false;
                         break;
                     }
@@ -431,7 +433,7 @@ class manager {
                     return;
                 }
                 session_regenerate_id(true);
-                $_SESSION = array();
+                $_SESSIONPLN = array();
                 $DB->delete_records('sessions', array('id'=>$record->id));
 
             } else {
@@ -475,15 +477,15 @@ class manager {
             if ($record) {
                 // This happens when people switch session handlers...
                 session_regenerate_id(true);
-                $_SESSION = array();
+                $_SESSIONPLN = array();
                 $DB->delete_records('sessions', array('id'=>$record->id));
             }
         }
         unset($record);
 
         $timedout = false;
-        if (!isset($_SESSION['SESSION'])) {
-            $_SESSION['SESSION'] = new \stdClass();
+        if (!isset($_SESSIONPLN['SESSION'])) {
+            $_SESSIONPLN['SESSION'] = new \stdClass();
             if (!$newsid) {
                 $timedout = true;
             }
@@ -516,7 +518,7 @@ class manager {
         }
 
         if ($timedout) {
-            $_SESSION['SESSION']->has_timed_out = true;
+            $_SESSIONPLN['SESSION']->has_timed_out = true;
         }
 
         self::append_samesite_cookie_attribute();
@@ -537,9 +539,10 @@ class manager {
         $record->timecreated = $record->timemodified = time();
         $record->firstip     = $record->lastip = getremoteaddr();
 
-        $record->id = $DB->insert_record('sessions', $record);
-
-        return $record;
+        // TODO do not use sessions in the database PLN
+//        $record->id = $DB->insert_record('sessions', $record);
+//
+//        return $record;
     }
 
     /**
@@ -551,15 +554,15 @@ class manager {
     protected static function check_security() {
         global $CFG;
 
-        if (!empty($_SESSION['USER']->id) and !empty($CFG->tracksessionip)) {
+        if (!empty($_SESSIONPLN['USER']->id) and !empty($CFG->tracksessionip)) {
             // Make sure current IP matches the one for this session.
             $remoteaddr = getremoteaddr();
 
-            if (empty($_SESSION['USER']->sessionip)) {
-                $_SESSION['USER']->sessionip = $remoteaddr;
+            if (empty($_SESSIONPLN['USER']->sessionip)) {
+                $_SESSIONPLN['USER']->sessionip = $remoteaddr;
             }
 
-            if ($_SESSION['USER']->sessionip != $remoteaddr) {
+            if ($_SESSIONPLN['USER']->sessionip != $remoteaddr) {
                 // This is a security feature - terminate the session in case of any doubt.
                 self::terminate_current();
                 throw new exception('sessionipnomatch2', 'error');
@@ -577,8 +580,8 @@ class manager {
         // Regenerate session id and delete old session,
         // this helps prevent session fixation attacks from the same domain.
 
-        $sid = session_id();
-        session_regenerate_id(true);
+//        $sid = session_id();
+//        session_regenerate_id(true);
         $DB->delete_records('sessions', array('sid'=>$sid));
         self::add_session_record($user->id);
 
@@ -675,7 +678,7 @@ class manager {
         session_regenerate_id(true);
         $DB->delete_records('sessions', array('sid'=>$sid));
         self::init_empty_session();
-        self::add_session_record($_SESSION['USER']->id); // Do not use $USER here because it may not be set up yet.
+        self::add_session_record($_SESSIONPLN['USER']->id); // Do not use $USER here because it may not be set up yet.
         self::write_close();
         self::append_samesite_cookie_attribute();
     }
@@ -702,7 +705,7 @@ class manager {
                 // there is a difference then a lock is required.
                 $arraydiff = self::array_session_diff(
                     self::$priorsession,
-                    (array) $_SESSION['SESSION']
+                    (array) $_SESSIONPLN['SESSION']
                 );
 
                 if ($arraydiff) {
@@ -927,7 +930,7 @@ class manager {
      * @param \stdClass $user record
      */
     public static function set_user(\stdClass $user) {
-        global $ADMIN;
+        global $ADMIN, $_SESSIONPLN;
         $GLOBALS['USER'] = $user;
         unset($GLOBALS['USER']->description); // Conserve memory.
         unset($GLOBALS['USER']->password);    // Improve security.
@@ -937,7 +940,7 @@ class manager {
         }
 
         // Relink session with global $USER just in case it got unlinked somehow.
-        $_SESSION['USER'] =& $GLOBALS['USER'];
+        $_SESSIONPLN['USER'] =& $GLOBALS['USER'];
 
         // Nullify the $ADMIN tree global. If we're changing users, then this is now stale and must be generated again if needed.
         $ADMIN = null;
@@ -1044,7 +1047,7 @@ class manager {
      */
     public static function get_realuser() {
         if (self::is_loggedinas()) {
-            return $_SESSION['REALUSER'];
+            return $_SESSIONPLN['REALUSER'];
         } else {
             return $GLOBALS['USER'];
         }
@@ -1064,16 +1067,16 @@ class manager {
             return;
         }
 
-        // Switch to fresh new $_SESSION.
-        $_SESSION = array();
-        $_SESSION['REALSESSION'] = clone($GLOBALS['SESSION']);
+        // Switch to fresh new $_SESSIONPLN.
+        $_SESSIONPLN = array();
+        $_SESSIONPLN['REALSESSION'] = clone($GLOBALS['SESSION']);
         $GLOBALS['SESSION'] = new \stdClass();
-        $_SESSION['SESSION'] =& $GLOBALS['SESSION'];
+        $_SESSIONPLN['SESSION'] =& $GLOBALS['SESSION'];
 
         // Create the new $USER object with all details and reload needed capabilities.
-        $_SESSION['REALUSER'] = clone($GLOBALS['USER']);
+        $_SESSIONPLN['REALUSER'] = clone($GLOBALS['USER']);
         $user = get_complete_user_data('id', $userid);
-        $user->realuser       = $_SESSION['REALUSER']->id;
+        $user->realuser       = $_SESSIONPLN['REALUSER']->id;
         $user->loginascontext = $context;
 
         // Let enrol plugins deal with new enrolments if necessary.
@@ -1164,6 +1167,11 @@ class manager {
 
         // Overwrite any previous values.
         $SESSION->logintoken[self::$logintokenkey] = $state;
+
+//        var_dump('PLNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+//
+//
+//        ', $SESSION->logintoken);
 
         return $state;
     }

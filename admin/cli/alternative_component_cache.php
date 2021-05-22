@@ -28,7 +28,7 @@
 
 
 define('CLI_SCRIPT', true);
-define('ABORT_AFTER_CONFIG', true); // We need just the values from config.php.
+//define('ABORT_AFTER_CONFIG', true); // We need just the values from config.php.
 define('CACHE_DISABLE_ALL', true); // This prevents reading of existing caches.
 define('IGNORE_COMPONENT_CACHE', true);
 

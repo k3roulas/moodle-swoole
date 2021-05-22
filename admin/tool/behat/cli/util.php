@@ -34,7 +34,7 @@ define('BEHAT_UTIL', true);
 define('CLI_SCRIPT', true);
 define('NO_OUTPUT_BUFFERING', true);
 define('IGNORE_COMPONENT_CACHE', true);
-define('ABORT_AFTER_CONFIG', true);
+//define('ABORT_AFTER_CONFIG', true);
 
 require_once(__DIR__ . '/../../../../lib/clilib.php');
 

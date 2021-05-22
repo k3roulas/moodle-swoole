@@ -25,10 +25,10 @@
 
 // disable moodle specific debug messages and any errors in output,
 // comment out when debugging or better look into error log!
-define('NO_DEBUG_DISPLAY', true);
+//define('NO_DEBUG_DISPLAY', true);
 
 // we need just the values from config.php and minlib.php
-define('ABORT_AFTER_CONFIG', true);
+//define('ABORT_AFTER_CONFIG', true);
 require('../config.php'); // this stops immediately at the beginning of lib/setup.php
 
 if ($slashargument = min_get_slash_argument()) {
@@ -115,7 +115,7 @@ yui_image_cached($imagepath, $imagename, $mimetype, $etag);
 
 function yui_image_cached($imagepath, $imagename, $mimetype, $etag) {
     global $CFG;
-    require("$CFG->dirroot/lib/xsendfilelib.php");
+    require_once("$CFG->dirroot/lib/xsendfilelib.php");
 
     $lifetime = 60*60*24*360; // 1 year, we do not change YUI versions often, there are a few custom yui modules
 

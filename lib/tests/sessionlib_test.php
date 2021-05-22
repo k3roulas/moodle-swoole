@@ -57,18 +57,18 @@ class core_sessionlib_testcase extends advanced_testcase {
         $SESSION->test1 = true;
         $adminsession = $SESSION;
         $adminuser = $USER;
-        $this->assertSame($GLOBALS['SESSION'], $_SESSION['SESSION']);
+        $this->assertSame($GLOBALS['SESSION'], $_SESSIONPLN['SESSION']);
         $this->assertSame($GLOBALS['SESSION'], $SESSION);
-        $this->assertSame($GLOBALS['USER'], $_SESSION['USER']);
+        $this->assertSame($GLOBALS['USER'], $_SESSIONPLN['USER']);
         $this->assertSame($GLOBALS['USER'], $USER);
 
         cron_setup_user(null, $course);
         $this->assertSame($admin->id, $USER->id);
         $this->assertSame($PAGE->context, context_course::instance($course->id));
         $this->assertSame($adminsession, $SESSION);
-        $this->assertSame($GLOBALS['SESSION'], $_SESSION['SESSION']);
+        $this->assertSame($GLOBALS['SESSION'], $_SESSIONPLN['SESSION']);
         $this->assertSame($GLOBALS['SESSION'], $SESSION);
-        $this->assertSame($GLOBALS['USER'], $_SESSION['USER']);
+        $this->assertSame($GLOBALS['USER'], $_SESSIONPLN['USER']);
         $this->assertSame($GLOBALS['USER'], $USER);
 
         cron_setup_user($user1);
@@ -79,9 +79,9 @@ class core_sessionlib_testcase extends advanced_testcase {
         $this->assertEmpty((array)$SESSION);
         $usersession1 = $SESSION;
         $SESSION->test2 = true;
-        $this->assertSame($GLOBALS['SESSION'], $_SESSION['SESSION']);
+        $this->assertSame($GLOBALS['SESSION'], $_SESSIONPLN['SESSION']);
         $this->assertSame($GLOBALS['SESSION'], $SESSION);
-        $this->assertSame($GLOBALS['USER'], $_SESSION['USER']);
+        $this->assertSame($GLOBALS['USER'], $_SESSIONPLN['USER']);
         $this->assertSame($GLOBALS['USER'], $USER);
 
         cron_setup_user($user1);
@@ -89,9 +89,9 @@ class core_sessionlib_testcase extends advanced_testcase {
         $this->assertSame($PAGE->context, context_course::instance($SITE->id));
         $this->assertNotSame($adminsession, $SESSION);
         $this->assertSame($usersession1, $SESSION);
-        $this->assertSame($GLOBALS['SESSION'], $_SESSION['SESSION']);
+        $this->assertSame($GLOBALS['SESSION'], $_SESSIONPLN['SESSION']);
         $this->assertSame($GLOBALS['SESSION'], $SESSION);
-        $this->assertSame($GLOBALS['USER'], $_SESSION['USER']);
+        $this->assertSame($GLOBALS['USER'], $_SESSIONPLN['USER']);
         $this->assertSame($GLOBALS['USER'], $USER);
 
         cron_setup_user($user2);
@@ -102,9 +102,9 @@ class core_sessionlib_testcase extends advanced_testcase {
         $this->assertEmpty((array)$SESSION);
         $usersession2 = $SESSION;
         $usersession2->test3 = true;
-        $this->assertSame($GLOBALS['SESSION'], $_SESSION['SESSION']);
+        $this->assertSame($GLOBALS['SESSION'], $_SESSIONPLN['SESSION']);
         $this->assertSame($GLOBALS['SESSION'], $SESSION);
-        $this->assertSame($GLOBALS['USER'], $_SESSION['USER']);
+        $this->assertSame($GLOBALS['USER'], $_SESSIONPLN['USER']);
         $this->assertSame($GLOBALS['USER'], $USER);
 
         cron_setup_user($user2, $course);
@@ -113,9 +113,9 @@ class core_sessionlib_testcase extends advanced_testcase {
         $this->assertNotSame($adminsession, $SESSION);
         $this->assertNotSame($usersession1, $SESSION);
         $this->assertSame($usersession2, $SESSION);
-        $this->assertSame($GLOBALS['SESSION'], $_SESSION['SESSION']);
+        $this->assertSame($GLOBALS['SESSION'], $_SESSIONPLN['SESSION']);
         $this->assertSame($GLOBALS['SESSION'], $SESSION);
-        $this->assertSame($GLOBALS['USER'], $_SESSION['USER']);
+        $this->assertSame($GLOBALS['USER'], $_SESSIONPLN['USER']);
         $this->assertSame($GLOBALS['USER'], $USER);
 
         cron_setup_user($user1);
@@ -124,9 +124,9 @@ class core_sessionlib_testcase extends advanced_testcase {
         $this->assertNotSame($adminsession, $SESSION);
         $this->assertNotSame($usersession1, $SESSION);
         $this->assertEmpty((array)$SESSION);
-        $this->assertSame($GLOBALS['SESSION'], $_SESSION['SESSION']);
+        $this->assertSame($GLOBALS['SESSION'], $_SESSIONPLN['SESSION']);
         $this->assertSame($GLOBALS['SESSION'], $SESSION);
-        $this->assertSame($GLOBALS['USER'], $_SESSION['USER']);
+        $this->assertSame($GLOBALS['USER'], $_SESSIONPLN['USER']);
         $this->assertSame($GLOBALS['USER'], $USER);
 
         cron_setup_user();
@@ -134,23 +134,23 @@ class core_sessionlib_testcase extends advanced_testcase {
         $this->assertSame($PAGE->context, context_course::instance($SITE->id));
         $this->assertSame($adminsession, $SESSION);
         $this->assertSame($adminuser, $USER);
-        $this->assertSame($GLOBALS['SESSION'], $_SESSION['SESSION']);
+        $this->assertSame($GLOBALS['SESSION'], $_SESSIONPLN['SESSION']);
         $this->assertSame($GLOBALS['SESSION'], $SESSION);
-        $this->assertSame($GLOBALS['USER'], $_SESSION['USER']);
+        $this->assertSame($GLOBALS['USER'], $_SESSIONPLN['USER']);
         $this->assertSame($GLOBALS['USER'], $USER);
 
         cron_setup_user('reset');
-        $this->assertSame($GLOBALS['SESSION'], $_SESSION['SESSION']);
+        $this->assertSame($GLOBALS['SESSION'], $_SESSIONPLN['SESSION']);
         $this->assertSame($GLOBALS['SESSION'], $SESSION);
-        $this->assertSame($GLOBALS['USER'], $_SESSION['USER']);
+        $this->assertSame($GLOBALS['USER'], $_SESSIONPLN['USER']);
         $this->assertSame($GLOBALS['USER'], $USER);
 
         cron_setup_user();
         $this->assertNotSame($adminsession, $SESSION);
         $this->assertNotSame($adminuser, $USER);
-        $this->assertSame($GLOBALS['SESSION'], $_SESSION['SESSION']);
+        $this->assertSame($GLOBALS['SESSION'], $_SESSIONPLN['SESSION']);
         $this->assertSame($GLOBALS['SESSION'], $SESSION);
-        $this->assertSame($GLOBALS['USER'], $_SESSION['USER']);
+        $this->assertSame($GLOBALS['USER'], $_SESSIONPLN['USER']);
         $this->assertSame($GLOBALS['USER'], $USER);
     }
 
@@ -256,13 +256,13 @@ class core_sessionlib_testcase extends advanced_testcase {
         $sesskey = sesskey();
         $this->assertNotEmpty($sesskey);
         $this->assertSame($sesskey, $USER->sesskey);
-        $this->assertSame($GLOBALS['USER'], $_SESSION['USER']);
+        $this->assertSame($GLOBALS['USER'], $_SESSIONPLN['USER']);
         $this->assertSame($GLOBALS['USER'], $USER);
 
         $this->assertSame($sesskey, sesskey());
 
         // Test incomplete session init - the sesskeys should return random values.
-        $_SESSION = array();
+        $_SESSIONPLN = array();
         unset($GLOBALS['USER']);
         unset($GLOBALS['SESSION']);
 

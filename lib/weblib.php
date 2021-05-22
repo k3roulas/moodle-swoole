@@ -2833,6 +2833,9 @@ function notice ($message, $link='', $course=null) {
 function redirect($url, $message='', $delay=null, $messagetype = \core\output\notification::NOTIFY_INFO) {
     global $OUTPUT, $PAGE, $CFG;
 
+//    echo "<PRE>";
+//    var_dump((new Exception())->getTraceAsString());
+
     if (CLI_SCRIPT or AJAX_SCRIPT) {
         // This is wrong - developers should not use redirect in these scripts but it should not be very likely.
         throw new moodle_exception('redirecterrordetected', 'error');
@@ -2953,21 +2956,27 @@ function redirect($url, $message='', $delay=null, $messagetype = \core\output\no
     // and also some potential PHP shutdown issues.
     \core\session\manager::write_close();
 
-    if ($delay == 0 && !$debugdisableredirect && !headers_sent()) {
+//    if ($delay == 0 && !$debugdisableredirect && !headers_sent()) {
         // This helps when debugging redirect issues like loops and it is not clear
         // which layer in the stack sent the redirect header.
-        @header('X-Redirect-By: Moodle');
+        SwooleHeader::addHeader('X-Redirect-By: Moodle');
+//        @header('X-Redirect-By: Moodle');
         // 302 might not work for POST requests, 303 is ignored by obsolete clients.
-        @header($_SERVER['SERVER_PROTOCOL'] . ' 303 See Other');
-        @header('Location: '.$url);
-        echo bootstrap_renderer::plain_redirect_message($encodedurl);
-        exit;
-    }
+//        @header($_SERVER['SERVER_PROTOCOL'] . ' 303 See Other');
+        SwooleHeader::addHeader($_SERVER['SERVER_PROTOCOL'] . ' 303 See Other');
+//        @header('Location: '.$url);
+        SwooleHeader::addHeader('Location: '.$url);
+//        echo bootstrap_renderer::plain_redirect_message($encodedurl);
+//        exit;
+//    }
 
     // Include a redirect message, even with a HTTP redirect, because that is recommended practice.
     if ($PAGE) {
         $CFG->docroot = false; // To prevent the link to moodle docs from being displayed on redirect page.
         echo $OUTPUT->redirect_message($encodedurl, $message, $delay, $debugdisableredirect, $messagetype);
+        // PLN
+        throw ((new ExceptionExit("redirect", 302)));
+        // end PLN
         exit;
     } else {
         echo bootstrap_renderer::early_redirect_message($encodedurl, $message, $delay);

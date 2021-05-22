@@ -81,7 +81,7 @@ if ($phpunitversion === '@package_version@') {
 unset($phpunitversion);
 
 // only load CFG from config.php, stop ASAP in lib/setup.php
-define('ABORT_AFTER_CONFIG', true);
+//define('ABORT_AFTER_CONFIG', true);
 require(__DIR__ . '/../../config.php');
 
 if (!defined('PHPUNIT_LONGTEST')) {

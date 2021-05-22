@@ -36,11 +36,11 @@ class BLTI {
             if ( $usesession === false ) return;
 
             if ( strlen(session_id()) > 0 ) {
-                $row = $_SESSION['_basiclti_lti_row'];
+                $row = $_SESSIONPLN['_basiclti_lti_row'];
                 if ( isset($row) ) $this->row = $row;
-                $context_id = $_SESSION['_basiclti_lti_context_id'];
+                $context_id = $_SESSIONPLN['_basiclti_lti_context_id'];
                 if ( isset($context_id) ) $this->context_id = $context_id;
-                $info = $_SESSION['_basic_lti_context'];
+                $info = $_SESSIONPLN['_basic_lti_context'];
                 if ( isset($info) ) {
                     $this->info = $info;
                     $this->valid = true;
@@ -109,11 +109,11 @@ class BLTI {
         $this->info = $newinfo;
 
         if ( $usesession == true and strlen(session_id()) > 0 ) {
-             $_SESSION['_basic_lti_context'] = $this->info;
-             unset($_SESSION['_basiclti_lti_row']);
-             unset($_SESSION['_basiclti_lti_context_id']);
-             if ( $this->row ) $_SESSION['_basiclti_lti_row'] = $this->row;
-             if ( $this->context_id ) $_SESSION['_basiclti_lti_context_id'] = $this->context_id;
+             $_SESSIONPLN['_basic_lti_context'] = $this->info;
+             unset($_SESSIONPLN['_basiclti_lti_row']);
+             unset($_SESSIONPLN['_basiclti_lti_context_id']);
+             if ( $this->row ) $_SESSIONPLN['_basiclti_lti_row'] = $this->row;
+             if ( $this->context_id ) $_SESSIONPLN['_basiclti_lti_context_id'] = $this->context_id;
         }
 
         if ( $this->valid && $doredirect ) {

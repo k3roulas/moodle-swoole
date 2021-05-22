@@ -75,7 +75,7 @@ class core_plugin_manager {
     const VERSION_NO_SUPPORTS = 'nosupports';
 
     /** @var core_plugin_manager holds the singleton instance */
-    protected static $singletoninstance;
+    public static $singletoninstance;
     /** @var array of raw plugins information */
     protected $pluginsinfo = null;
     /** @var array of raw subplugins information */

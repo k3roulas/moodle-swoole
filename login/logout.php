@@ -50,6 +50,7 @@ if (!isloggedin()) {
     echo $OUTPUT->header();
     echo $OUTPUT->confirm(get_string('logoutconfirm'), new moodle_url($PAGE->url, array('sesskey'=>sesskey())), $CFG->wwwroot.'/');
     echo $OUTPUT->footer();
+    throw new ExceptionExit();
     die;
 }
 

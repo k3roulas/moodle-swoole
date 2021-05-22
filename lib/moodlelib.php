@@ -571,7 +571,6 @@ function required_param($parname, $type) {
         // TODO: switch to fatal error in Moodle 2.3.
         return required_param_array($parname, $type);
     }
-
     return clean_param($param, $type);
 }
 
@@ -3107,7 +3106,7 @@ function require_logout() {
     // Clone of $USER object to be used by auth plugins.
     $user = fullclone($USER);
 
-    // Delete session record and drop $_SESSION content.
+    // Delete session record and drop $_SESSIONPLN content.
     \core\session\manager::terminate_current();
 
     // Trigger event AFTER action.
@@ -4417,7 +4416,8 @@ function guest_user() {
  * @return stdClass|false A {@link $USER} object or false if error
  */
 function authenticate_user_login($username, $password, $ignorelockout=false, &$failurereason=null, $logintoken=false) {
-    global $CFG, $DB, $PAGE;
+    global $CFG, $DB, $PAGE, $SESSION;
+
     require_once("$CFG->libdir/authlib.php");
 
     if ($user = get_complete_user_data('username', $username, $CFG->mnet_localhost_id)) {
@@ -4451,7 +4451,9 @@ function authenticate_user_login($username, $password, $ignorelockout=false, &$f
             ],
         ])->trigger();
 
-        error_log('[client '.getremoteaddr()."]  $CFG->wwwroot  Invalid Login Token:  $username  ".$_SERVER['HTTP_USER_AGENT']);
+        error_log('[client '.getremoteaddr()."]  $CFG->wwwroot  Invalid Login Token:  $username  $logintoken count " . count($SESSION->logintoken) . $_SERVER['HTTP_USER_AGENT']);
+//PLN
+//        error_log('[client '.getremoteaddr()."]  $CFG->wwwroot  Invalid Login Token:  $username ".$_SERVER['HTTP_USER_AGENT']);
         return false;
     }
 

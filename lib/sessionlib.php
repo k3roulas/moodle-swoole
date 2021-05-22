@@ -34,18 +34,19 @@ defined('MOODLE_INTERNAL') || die();
  * @return string
  */
 function sesskey() {
+    global $_SESSIONPLN;
+
     // note: do not use $USER because it may not be initialised yet
-    if (empty($_SESSION['USER']->sesskey)) {
-        if (!isset($_SESSION['USER'])) {
+    if (empty($_SESSIONPLN['USER']->sesskey)) {
+        if (!isset($_SESSIONPLN['USER'])) {
             // This should never happen,
             // do not mess with session and globals here,
             // let any checks fail instead!
             return false;
         }
-        $_SESSION['USER']->sesskey = random_string(10);
+        $_SESSIONPLN['USER']->sesskey = random_string(10);
     }
-
-    return $_SESSION['USER']->sesskey;
+    return $_SESSIONPLN['USER']->sesskey;
 }
 
 
@@ -125,17 +126,18 @@ function set_moodle_cookie($username) {
         return;
     }
 
-    $cookiename = 'MOODLEID1_'.$CFG->sessioncookie;
-
-    $cookiesecure = is_moodle_cookie_secure();
-
-    // Delete old cookie.
-    setcookie($cookiename, '', time() - HOURSECS, $CFG->sessioncookiepath, $CFG->sessioncookiedomain, $cookiesecure, $CFG->cookiehttponly);
-
-    if ($username !== '') {
-        // Set username cookie for 60 days.
-        setcookie($cookiename, rc4encrypt($username), time() + (DAYSECS * 60), $CFG->sessioncookiepath, $CFG->sessioncookiedomain, $cookiesecure, $CFG->cookiehttponly);
-    }
+    // Let swoole manage cookies // PLN
+//    $cookiename = 'MOODLEID1_'.$CFG->sessioncookie;
+//
+//    $cookiesecure = is_moodle_cookie_secure();
+//
+//    // Delete old cookie.
+//    setcookie($cookiename, '', time() - HOURSECS, $CFG->sessioncookiepath, $CFG->sessioncookiedomain, $cookiesecure, $CFG->cookiehttponly);
+//
+//    if ($username !== '') {
+//        // Set username cookie for 60 days.
+//        setcookie($cookiename, rc4encrypt($username), time() + (DAYSECS * 60), $CFG->sessioncookiepath, $CFG->sessioncookiedomain, $cookiesecure, $CFG->cookiehttponly);
+//    }
 }
 
 /**

@@ -94,9 +94,9 @@ class helper {
         foreach ($sessions as $session) {
             // Get user session from DB.
             if (session_decode(base64_decode($session->sessdata))) {
-                if (isset($_SESSION['SESSION']) && isset($_SESSION['SESSION']->shibboleth_session_id)) {
+                if (isset($_SESSIONPLN['SESSION']) && isset($_SESSIONPLN['SESSION']->shibboleth_session_id)) {
                     // If there is a match, kill the session.
-                    if ($_SESSION['SESSION']->shibboleth_session_id == trim($spsessionid)) {
+                    if ($_SESSIONPLN['SESSION']->shibboleth_session_id == trim($spsessionid)) {
                         // Delete this user's sessions.
                         \core\session\manager::kill_user_sessions($session->userid);
                     }

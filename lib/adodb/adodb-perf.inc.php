@@ -700,8 +700,8 @@ Committed_AS:   348732 kB
 		$_GET['sql'] = $_GET['sql'] = str_replace(array("\\'",'\"'),array("'",'"'),$_GET['sql']);
 	}
 
-	if (!isset($_SESSION['ADODB_PERF_SQL'])) $nsql = $_SESSION['ADODB_PERF_SQL'] = 10;
-	else  $nsql = $_SESSION['ADODB_PERF_SQL'];
+	if (!isset($_SESSIONPLN['ADODB_PERF_SQL'])) $nsql = $_SESSIONPLN['ADODB_PERF_SQL'] = 10;
+	else  $nsql = $_SESSIONPLN['ADODB_PERF_SQL'];
 
 	$app .= $info['description'];
 
@@ -712,7 +712,7 @@ Committed_AS:   348732 kB
 	 else $do = 'stats';
 
 	if (isset($_GET['nsql'])) {
-		if ($_GET['nsql'] > 0) $nsql = $_SESSION['ADODB_PERF_SQL'] = (integer) $_GET['nsql'];
+		if ($_GET['nsql'] > 0) $nsql = $_SESSIONPLN['ADODB_PERF_SQL'] = (integer) $_GET['nsql'];
 	}
 	echo "<title>ADOdb Performance Monitor on $app</title><body bgcolor=white>";
 	if ($do == 'viewsql') $form = "<td><form># SQL:<input type=hidden value=viewsql name=do> <input type=text size=4 name=nsql value=$nsql><input type=submit value=Go></td></form>";
@@ -924,17 +924,17 @@ Committed_AS:   348732 kB
 		$PHP_SELF = htmlspecialchars($_SERVER['PHP_SELF']);
 		$sql = isset($_REQUEST['sql']) ? $_REQUEST['sql'] : '';
 
-		if (isset($_SESSION['phplens_sqlrows'])) $rows = $_SESSION['phplens_sqlrows'];
+		if (isset($_SESSIONPLN['phplens_sqlrows'])) $rows = $_SESSIONPLN['phplens_sqlrows'];
 		else $rows = 3;
 
 		if (isset($_REQUEST['SMALLER'])) {
 			$rows /= 2;
 			if ($rows < 3) $rows = 3;
-			$_SESSION['phplens_sqlrows'] = $rows;
+			$_SESSIONPLN['phplens_sqlrows'] = $rows;
 		}
 		if (isset($_REQUEST['BIGGER'])) {
 			$rows *= 2;
-			$_SESSION['phplens_sqlrows'] = $rows;
+			$_SESSIONPLN['phplens_sqlrows'] = $rows;
 		}
 
 ?>

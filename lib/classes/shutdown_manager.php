@@ -167,7 +167,7 @@ class core_shutdown_manager {
 
         // Handle DB transactions, session need to be written afterwards
         // in order to maintain consistency in all session handlers.
-        if ($DB->is_transaction_started()) {
+        if ($DB && $DB->is_transaction_started()) {
             if (!defined('PHPUNIT_TEST') or !PHPUNIT_TEST) {
                 // This should not happen, it usually indicates wrong catching of exceptions,
                 // because all transactions should be finished manually or in default exception handler.
